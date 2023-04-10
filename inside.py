@@ -36,7 +36,7 @@ def inside():
     ## 1.영업부별 영업기회 차트
     b2b_class1 = df['영업부'].value_counts()
     b2b_counts_chart = alt.Chart(b2b_class1.reset_index()).mark_bar().encode(
-        x=alt.X('index:N', axis=alt.Axis(title='영업부',labelAngle=0)),
+        x=alt.X('index:N', axis=alt.Axis(title='영업부',labelAngle=45)),
         y=alt.Y('영업부:Q', axis=alt.Axis(title='영업기회 개수')),
         color=alt.Color('index:N', scale=alt.Scale(range=['steelblue']), legend=None))
     text = b2b_counts_chart.mark_text(dy=-10).encode(
@@ -46,8 +46,8 @@ def inside():
     ## 2. 영업부별 영업기회 합계
     b2b_sum = df.groupby('영업부').sum()
     b2b_sum_chart = alt.Chart(b2b_sum.reset_index()).mark_bar().encode(
-        x=alt.X('영업부', axis=alt.Axis(title='영업부',labelAngle=0)),
-        y=alt.Y('영업기회금액', axis=alt.Axis(title='영업기회금액 (원)', format=',.0f')),
+        x=alt.X('영업부', axis=alt.Axis(title='영업부',labelAngle=45)),
+        y=alt.Y('영업기회금액', axis=alt.Axis(title='영업기회금액 (G=10억원)', format='s')),
         color=alt.Color('index:N', legend=None)
     )
     text = b2b_sum_chart.mark_text(dy=-10).encode(
@@ -75,7 +75,7 @@ def inside():
         b2b_class1 = df.loc[df['영업부'] == b2b_box1, '영업기회대표상품1레벨'].value_counts()
         
     b2b_class1_chart = alt.Chart(b2b_class1.reset_index()).mark_bar().encode(
-        x=alt.X('index:N', axis=alt.Axis(title='상품 대분류',labelAngle=0)),
+        x=alt.X('index:N', axis=alt.Axis(title='상품 대분류',labelAngle=45)),
         y=alt.Y('영업기회대표상품1레벨:Q', axis=alt.Axis(title='개수')),
         color=alt.Color('index:N', legend=None)
     )
