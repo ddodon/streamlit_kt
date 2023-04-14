@@ -9,11 +9,11 @@ def outside():
     @st.cache_data
     def load_data():
         data_load_state = st.text('데이터를 불러오는 중 입니다...')
-        #url = 'https://github.com/ddodon/streamlit_kt/raw/main/sample_data.xlsx'
-        url = '/Users/don/Desktop/스트림릿/b2b_out_230411.xlsx' # 디버깅용 로컬데이터 경로
+        url = 'https://github.com/ddodon/streamlit_kt/raw/main/b2b_out_230411.xlsx'
+        #url = '/Users/don/Desktop/스트림릿/b2b_out_230411.xlsx' # 디버깅용 로컬데이터 경로
         
         df = pd.read_excel(url, engine = "openpyxl")
-        data_load_state.text('데이터 로드 완료! (22/12/26 ~ 23/4/11 데이터)')
+        data_load_state.text('데이터 로드 완료! (22/12/26 ~ 23/4/14 데이터)')
         return df
     data_load_state = st.empty()
     df = load_data()
