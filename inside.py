@@ -16,11 +16,11 @@ def inside():
     @st.cache_data
     def load_data():
         data_load_state = st.text('데이터를 불러오는 중 입니다...')
-        url = 'https://github.com/ddodon/streamlit_kt/raw/main/sample_data.xlsx'
-        #url = '/Users/don/Desktop/스트림릿/sample_data.xlsx' # 디버깅용 로컬데이터 경로
+        #url = 'https://github.com/ddodon/streamlit_kt/raw/main/sample_data.xlsx'
+        url = '/Users/don/Desktop/스트림릿/b2b_in_230411.xlsx' # 디버깅용 로컬데이터 경로
         
         df = pd.read_excel(url, engine = "openpyxl")
-        data_load_state.text('데이터 로드 완료!')
+        data_load_state.text('데이터 로드 완료! (~4/11 데이터)')
         return df
     data_load_state = st.empty()
     df = load_data()
@@ -77,7 +77,7 @@ def inside():
     b2b_class1_chart = alt.Chart(b2b_class1.reset_index()).mark_bar().encode(
         x=alt.X('index:N', axis=alt.Axis(title='상품 대분류',labelAngle=45)),
         y=alt.Y('영업기회대표상품1레벨:Q', axis=alt.Axis(title='개수')),
-        color=alt.Color('index:N', legend=None)
+        color=alt.Color('index:N', scale=alt.Scale(range=['steelblue']), legend=None)
     )
     text = b2b_class1_chart.mark_text(dy=-8).encode(
         text=alt.Text('영업기회대표상품1레벨:Q')
@@ -95,7 +95,7 @@ def inside():
     b2b_class2_chart = alt.Chart(b2b_class2.reset_index()).mark_bar().encode(
         x=alt.X('index:N', axis=alt.Axis(title='상품 소분류',labelAngle=90,labelLimit=0)),
         y=alt.Y('영업기회대표상품2레벨:Q', axis=alt.Axis(title='개수')),
-        color=alt.Color('index:N', legend=None)
+        color=alt.Color('index:N', scale=alt.Scale(range=['steelblue']), legend=None)
     )
     text = b2b_class2_chart.mark_text(dy=-8).encode(
         text=alt.Text('영업기회대표상품2레벨:Q')
@@ -105,8 +105,12 @@ def inside():
     # 5. 각 영업부별 최다 판매 항목 구하기
     b2b_rank = df.groupby('영업부')['영업기회대표상품1레벨'].apply(lambda x: x.value_counts().index[0]).reset_index()
     b2b_rank['영업기회대표상품2레벨'] = b2b_rank['영업부'].apply(lambda x: df.loc[df['영업부'] == x, '영업기회대표상품2레벨'].value_counts().index[0])
+    b2b_rank['영업기회대표상품3레벨'] = b2b_rank['영업부'].apply(lambda x: df.loc[df['영업부'] == x, '영업기회대표상품3레벨'].value_counts().index[0])
+    b2b_rank['영업기회대표상품4레벨'] = b2b_rank['영업부'].apply(lambda x: df.loc[df['영업부'] == x, '영업기회대표상품4레벨'].value_counts().index[0])
     b2b_rank = b2b_rank.rename(columns={'영업기회대표상품1레벨':'최다판매(대분류)'})
     b2b_rank = b2b_rank.rename(columns={'영업기회대표상품2레벨':'최다판매(소분류)'})
+    b2b_rank = b2b_rank.rename(columns={'영업기회대표상품3레벨':'최다판매(자세히)'})
+    b2b_rank = b2b_rank.rename(columns={'영업기회대표상품4레벨':'최다판매 상품'})
     b2b_rank = b2b_rank.reindex([4, 3, 5, 1, 2, 0])
     # 인덱스 재정렬
     b2b_rank = b2b_rank.reset_index(drop=True)
